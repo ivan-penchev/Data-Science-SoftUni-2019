@@ -123,6 +123,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+<<<<<<< HEAD
 _data/
 
 Data/globalterrorismdb.csv
+=======
+_data/
+>>>>>>> dc664e69b29b5f7d103ecc29376920f8cc2b2253
