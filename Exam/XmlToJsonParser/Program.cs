@@ -18,11 +18,11 @@ namespace XmlToJsonParser
             {
                 string header = "carBrand,carModel,carModelGeneration,engine,yearStart,yearStop,fuelConsumptionUrban,fuelConsumptionUrbanMin,fuelConsumptionCombined,fuelConsumptionCombinedMin";
                 strBld.AppendLine(header);
-                string brandsName = "";
                 XmlModel.Brands result = (XmlModel.Brands)serializer.Deserialize(reader);
                 foreach (var brand in result.Brand)
                 {
-                    string brandName = brand.Name;
+                    string brandName = "unknown";
+                    brandName=brand.Name;
                     if(brandName.Contains('-')){
                         brandName=brandName.Replace("-", string.Empty);
                     }
@@ -36,7 +36,22 @@ namespace XmlToJsonParser
                         {
                             foreach (var modModelGen in modelGen.Modifications.Modification)
                             {
-                                strBld.AppendLine($"{brandName},{modModelGen.Model},{modModelGen.Generation},{(string.IsNullOrWhiteSpace(modModelGen.Engine)? string.Empty:modModelGen.Engine)},{(string.IsNullOrWhiteSpace(modModelGen.Yearstart)?string.Empty:modModelGen.Yearstart)},{(string.IsNullOrWhiteSpace(modModelGen.Yearstop)? string.Empty:modModelGen.Yearstop)},{(string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionUrban)? string.Empty:modModelGen.FuelConsumptionUrban)},{(string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionUrbanMin)? string.Empty:modModelGen.FuelConsumptionUrbanMin)},{(string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionCombined)? string.Empty:modModelGen.FuelConsumptionCombined)},{(string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionCombinedMin)? string.Empty:modModelGen.FuelConsumptionCombinedMin)}");
+                                var modelRdy =  string.IsNullOrWhiteSpace(modModelGen.Model)? string.Empty:modModelGen.Model.Replace(',', '.').ToString();
+                                var generationRdy =  string.IsNullOrWhiteSpace(modModelGen.Generation)? string.Empty:modModelGen.Generation.Replace(',', '.').ToString();
+                                var engineRdy = string.IsNullOrWhiteSpace(modModelGen.Engine)? string.Empty:modModelGen.Engine.Replace(',', '.').ToString();
+                                var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
+                                brandName,
+                                modelRdy,
+                                generationRdy,
+                                engineRdy,
+                                (string.IsNullOrWhiteSpace(modModelGen.Yearstart)? string.Empty:modModelGen.Yearstart),
+                                (string.IsNullOrWhiteSpace(modModelGen.Yearstop)? string.Empty:modModelGen.Yearstop),
+                                (string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionUrban)? string.Empty:modModelGen.FuelConsumptionUrban),
+                                (string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionUrbanMin)? string.Empty:modModelGen.FuelConsumptionUrbanMin),
+                                (string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionCombined)? string.Empty:modModelGen.FuelConsumptionCombined),
+                                (string.IsNullOrWhiteSpace(modModelGen.FuelConsumptionCombinedMin)? string.Empty:modModelGen.FuelConsumptionCombinedMin)
+                                ); 
+                                strBld.AppendLine(newLine);
                             }
                         }
                     }
